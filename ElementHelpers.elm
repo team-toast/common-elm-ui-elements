@@ -111,14 +111,17 @@ responsiveVal dProfile desktopVal mobileVal =
 -- COLORS
 
 
+transparent : Element.Color
 transparent =
     Element.rgba 0 0 0 0
 
 
+black : Element.Color
 black =
     Element.rgb 0 0 0
 
 
+white : Element.Color
 white =
     Element.rgb 1 1 1
 
@@ -148,39 +151,6 @@ fakeLink name =
         { url = "#"
         , label = Element.text name
         }
-
-
-
--- INPUTS
--- dropdownSelector : List ( Element msg, msg ) -> Element msg
--- dropdownSelector itemsAndMsgs =
---     Element.column
---         [ Element.Border.color <| Element.rgba 0 0 0 0.2
---         , Element.Border.width 1
---         , Element.Border.rounded 5
---         , Element.Background.color white
---         , Element.padding 10
---         , Element.htmlAttribute <| Html.Attributes.style "position" "fixed"
---         , Element.htmlAttribute <| Html.Attributes.style "z-index" "1000"
---         , Element.Border.shadow
---             { offset = ( 2, 2 )
---             , size = 0
---             , blur = 10
---             , color = Element.rgba 0 0 0 0.1
---             }
---         ]
---         (itemsAndMsgs
---             |> List.map
---                 (\( el, msg ) ->
---                     Element.el
---                         [ Element.paddingXY 0 5
---                         , onClickNoPropagation msg
---                         , Element.mouseOver [ Element.Background.color <| Element.rgb 0.8 0.8 1 ]
---                         ]
---                         el
---                 )
---         )
--- BUTTONS
 
 
 type ButtonAction msg
@@ -261,8 +231,8 @@ textWithoutTextCursor s =
         |> Element.html
 
 
-withTitle : String -> Attribute msg
-withTitle title =
+withHovertext : String -> Attribute msg
+withHovertext title =
     Html.Attributes.title title
         |> Element.htmlAttribute
 
@@ -293,18 +263,6 @@ roundTopCorners r =
         , bottomLeft = 0
         , bottomRight = 0
         }
-
-
-withHeader : String -> Element msg -> Element msg
-withHeader headerString element =
-    Element.column [ Element.spacing 10 ]
-        [ Element.el
-            [ Element.Font.size 17
-            , Element.Font.semiBold
-            ]
-            (Element.text headerString)
-        , element
-        ]
 
 
 
@@ -350,73 +308,6 @@ modal overlayColor includeScrollbarY clickInsideMsg clickOutsideMsg el =
         el
 
 
-
--- closeableModal : Bool -> List (Attribute msg) -> Element msg -> msg -> msg -> Bool -> Element msg
--- closeableModal isBlack extraAttributes innerEl clickInsideMsg closeMsg includeScrollbarY =
---     modal
---         (Element.rgba 0 0 0.3 0.6)
---         includeScrollbarY
---         clickInsideMsg
---         closeMsg
---     <|
---         Element.el
---             ([ Element.centerX
---              , Element.centerY
---              , Element.width (Element.fill |> Element.maximum 700)
---              , Element.Background.color white
---              , Element.Border.rounded 8
---              , Element.inFront <|
---                 Element.el
---                     [ Element.alignRight
---                     , Element.alignTop
---                     ]
---                     (closeButton isBlack closeMsg)
---              ]
---                 ++ extraAttributes
---             )
---             innerEl
--- closeableModalBlackX =
---     closeableModal True
--- closeableModalWhiteX =
---     closeableModal False
--- txProcessModal : List (Element msg) -> msg -> msg -> msg -> Element msg
--- txProcessModal textLines clickInsideMsg closeMsg clickOutsideMsg =
---     modal
---         (Element.rgba 0 0 0.3 0.6)
---         False
---         clickInsideMsg
---         clickOutsideMsg
---     <|
---         Element.column
---             [ Element.spacing 10
---             , Element.centerX
---             , Element.centerY
---             , Element.Background.color <| Element.rgba 0 0 0 0.5
---             , Element.Border.rounded 8
---             , Element.padding 20
---             , Element.inFront <|
---                 Element.el
---                     [ Element.alignRight
---                     , Element.alignTop
---                     ]
---                     (closeButton False closeMsg)
---             ]
---             (textLines
---                 |> List.map
---                     (\line ->
---                         Element.paragraph
---                             [ Element.centerX
---                             , Element.centerY
---                             , Element.Font.size 20
---                             , Element.Font.semiBold
---                             , Element.Font.color white
---                             , Element.Font.center
---                             ]
---                             [ line ]
---                     )
---             )
-
-
 subtleShadow : Attribute msg
 subtleShadow =
     Element.Border.shadow
@@ -443,40 +334,6 @@ closeButton attributes color msg =
             ]
             (Element.text "x")
         )
-
-
-
--- (Element.image [ Element.width <| Element.px 22 ]
---     { src =
---         if isBlack then
---             "img/remove-circle-black.svg"
---         else
---             "img/remove-circle-white.svg"
---     , description = "close"
---     }
--- )
-
-
-elOnCircle : List (Attribute msg) -> Int -> Element.Color -> Element msg -> Element msg
-elOnCircle attributes width color el =
-    let
-        circleElement =
-            Collage.circle (toFloat width / 2)
-                |> Collage.filled (Collage.uniform (elementColorToAvh4Color color))
-                |> Collage.Render.svg
-                |> Element.html
-    in
-    Element.el
-        ([ Element.inFront <|
-            Element.el
-                [ Element.centerX
-                , Element.centerY
-                ]
-                el
-         ]
-            ++ attributes
-        )
-        circleElement
 
 
 elementColorToAvh4Color : Element.Color -> Color
