@@ -88,9 +88,9 @@ type DisplayProfile
     | Mobile
 
 
-screenWidthToDisplayProfile : Int -> DisplayProfile
-screenWidthToDisplayProfile width =
-    if width >= 1150 then
+screenWidthToDisplayProfile : Int -> Int -> DisplayProfile
+screenWidthToDisplayProfile breakpoint width =
+    if width >= breakpoint then
         Desktop
 
     else
